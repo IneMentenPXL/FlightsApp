@@ -14,8 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 /**
  * Command-line client allowing users to log in, search for flights, reserve
@@ -220,7 +222,9 @@ public class FlightsApp {
 			db.removeReservations(user, it.getFlights());
 			System.out.println("Successfully canceled flights");
 		}
+
 	}
+
 
 	/**
 	 * Groups the given flights into iterinaries. We can do this under the
@@ -276,17 +280,17 @@ public class FlightsApp {
 
 	public static void main(String[] args) throws Exception {
 		Path settingsFile = Path.of("src/main/resources/dbconn.properties");
+		FlightsDB db = new FlightsDB();
 
 		if (args.length > 0) {
-			if ("-settings".equals(args[0])) {
-				settingsFile = Path.of(args[0]);
+			if ("-settings".equals(args[0]) && args.length == 2) {
+				settingsFile = Path.of(args[1]);
 			} else {
-				System.err.println("Usage: java -jar FlightsApp.jar [-settings settings_file]");
+				System.err.println(
+						"Usage: java FlightsApp [-settings settings_file]");
 				System.exit(1);
 			}
 		}
-
-		FlightsDB db = new FlightsDB();
 
 		Properties settings = new Properties();
 		settings.load(Files.newInputStream(settingsFile));
